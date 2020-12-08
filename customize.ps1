@@ -439,4 +439,4 @@ Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Pe
 
 ## Install softs and tools
 Write-Host "Installing all software and tools in packages.config"
-choco install .\packages.config -y
+choco install .\essential-packages.config -y
