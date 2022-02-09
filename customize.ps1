@@ -1,30 +1,5 @@
 ## Script inspired from https://github.com/ChrisTitusTech/win10script
 
-$ErrorActionPreference = 'SilentlyContinue'
-$wshell = New-Object -ComObject Wscript.Shell
-$Button = [System.Windows.MessageBoxButton]::YesNoCancel
-$ErrorIco = [System.Windows.MessageBoxImage]::Error
-$Ask = 'Do you want to run this as an Administrator?
-        Select "Yes" to Run as an Administrator
-        Select "No" to not run this as an Administrator
-        
-        Select "Cancel" to stop the script.'
-
-If (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]'Administrator')) {
-    $Prompt = [System.Windows.MessageBox]::Show($Ask, "Run as an Administrator or not?", $Button, $ErrorIco) 
-    Switch ($Prompt) {
-        #This will debloat Windows 10
-        Yes {
-            Write-Host "You didn't run this script as an Administrator. This script will self elevate to run as an Administrator and continue."
-            Start-Process PowerShell.exe -ArgumentList ("-NoProfile -ExecutionPolicy Bypass -File `"{0}`"" -f $PSCommandPath) -Verb RunAs
-            Exit
-        }
-        No {
-            Break
-        }
-    }
-}
-
 ## Install tools for script
 
 Write-Host "Installing Chocolatey"
@@ -211,7 +186,7 @@ $Bloatware = @(
     "Microsoft.BingNews"
     "Microsoft.BingSports"
     "Microsoft.BingTranslator"
-    "Microsoft.BingWeather"
+    #"Microsoft.BingWeather"
     "Microsoft.GetHelp"
     "Microsoft.Getstarted"
     "Microsoft.Messaging"
@@ -266,7 +241,7 @@ $Bloatware = @(
     #Optional: Typically not removed but you can if you need to for some reason
     #"*Microsoft.Advertising.Xaml_10.1712.5.0_x64__8wekyb3d8bbwe*"
     #"*Microsoft.Advertising.Xaml_10.1712.5.0_x86__8wekyb3d8bbwe*"
-    "*Microsoft.BingWeather*"
+    #"*Microsoft.BingWeather*"
     #"*Microsoft.MSPaint*"
     #"*Microsoft.MicrosoftStickyNotes*"
     #"*Microsoft.Windows.Photos*"
@@ -313,24 +288,24 @@ If (Test-Path $Edge) {
 }
 
 # Disable Cortana
-Write-Host "Disabling Cortana..."
-If (!(Test-Path "HKCU:\SOFTWARE\Microsoft\Personalization\Settings")) {
-    New-Item -Path "HKCU:\SOFTWARE\Microsoft\Personalization\Settings" -Force | Out-Null
-}
-Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Personalization\Settings" -Name "AcceptedPrivacyPolicy" -Type DWord -Value 0
-If (!(Test-Path "HKCU:\SOFTWARE\Microsoft\InputPersonalization")) {
-    New-Item -Path "HKCU:\SOFTWARE\Microsoft\InputPersonalization" -Force | Out-Null
-}
-Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\InputPersonalization" -Name "RestrictImplicitTextCollection" -Type DWord -Value 1
-Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\InputPersonalization" -Name "RestrictImplicitInkCollection" -Type DWord -Value 1
-If (!(Test-Path "HKCU:\SOFTWARE\Microsoft\InputPersonalization\TrainedDataStore")) {
-    New-Item -Path "HKCU:\SOFTWARE\Microsoft\InputPersonalization\TrainedDataStore" -Force | Out-Null
-}
-Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\InputPersonalization\TrainedDataStore" -Name "HarvestContacts" -Type DWord -Value 0
-If (!(Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search")) {
-    New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search" -Force | Out-Null
-}
-Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search" -Name "AllowCortana" -Type DWord -Value 0
+# Write-Host "Disabling Cortana..."
+# If (!(Test-Path "HKCU:\SOFTWARE\Microsoft\Personalization\Settings")) {
+#     New-Item -Path "HKCU:\SOFTWARE\Microsoft\Personalization\Settings" -Force | Out-Null
+# }
+# Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Personalization\Settings" -Name "AcceptedPrivacyPolicy" -Type DWord -Value 0
+# If (!(Test-Path "HKCU:\SOFTWARE\Microsoft\InputPersonalization")) {
+#     New-Item -Path "HKCU:\SOFTWARE\Microsoft\InputPersonalization" -Force | Out-Null
+# }
+# Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\InputPersonalization" -Name "RestrictImplicitTextCollection" -Type DWord -Value 1
+# Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\InputPersonalization" -Name "RestrictImplicitInkCollection" -Type DWord -Value 1
+# If (!(Test-Path "HKCU:\SOFTWARE\Microsoft\InputPersonalization\TrainedDataStore")) {
+#     New-Item -Path "HKCU:\SOFTWARE\Microsoft\InputPersonalization\TrainedDataStore" -Force | Out-Null
+# }
+# Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\InputPersonalization\TrainedDataStore" -Name "HarvestContacts" -Type DWord -Value 0
+# If (!(Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search")) {
+#     New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search" -Force | Out-Null
+# }
+# Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search" -Name "AllowCortana" -Type DWord -Value 0
 
 #Disable background apps
 Write-Host "Disabling Background application access..."
